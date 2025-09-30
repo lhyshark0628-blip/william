@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>記帳小幫手</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>記帳小幫手</h1>
+      <p>用圖表掌握收支變化，讓理財更有感！</p>
+    </header>
+
+    <main class="layout">
+      <section class="card form-card">
+        <h2>新增交易</h2>
+        <form id="transaction-form">
+          <div class="form-group">
+            <label for="type">類型</label>
+            <select id="type" name="type" required>
+              <option value="income">收入</option>
+              <option value="expense">支出</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category">分類</label>
+            <input
+              id="category"
+              name="category"
+              type="text"
+              placeholder="例如：薪水、餐飲"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="amount">金額</label>
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              min="0"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="date">日期</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+          <div class="form-group">
+            <label for="note">備註</label>
+            <input id="note" name="note" type="text" placeholder="可留空" />
+          </div>
+          <button type="submit" class="btn primary">加入</button>
+        </form>
+      </section>
+
+      <section class="card summary-card">
+        <h2>收支摘要</h2>
+        <div class="summary">
+          <div>
+            <span class="summary-label">總收入</span>
+            <span class="summary-value income" id="total-income">$0</span>
+          </div>
+          <div>
+            <span class="summary-label">總支出</span>
+            <span class="summary-value expense" id="total-expense">$0</span>
+          </div>
+          <div>
+            <span class="summary-label">結餘</span>
+            <span class="summary-value balance" id="balance">$0</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card chart-card">
+        <div class="chart-header">
+          <h2>結餘走勢</h2>
+          <select id="chart-range">
+            <option value="all">全部</option>
+            <option value="3m">近三個月</option>
+            <option value="6m">近半年</option>
+            <option value="12m">近一年</option>
+          </select>
+        </div>
+        <canvas id="balance-chart" height="200"></canvas>
+        <p id="chart-empty" class="chart-empty" hidden>
+          暫無資料，請新增交易或調整範圍。
+        </p>
+      </section>
+
+      <section class="card table-card">
+        <div class="table-header">
+          <h2>交易記錄</h2>
+          <button id="clear-transactions" class="btn danger" type="button">
+            清空全部
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>分類</th>
+                <th>類型</th>
+                <th class="align-right">金額</th>
+                <th>備註</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="transaction-table"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>資料將保存在瀏覽器的 LocalStorage，請放心使用。</p>
+    </footer>
+
+    <template id="transaction-row-template">
+      <tr>
+        <td data-field="date"></td>
+        <td data-field="category"></td>
+        <td data-field="type"></td>
+        <td data-field="amount" class="align-right"></td>
+        <td data-field="note"></td>
+        <td class="action-cell">
+          <button class="btn ghost" data-action="delete">刪除</button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
